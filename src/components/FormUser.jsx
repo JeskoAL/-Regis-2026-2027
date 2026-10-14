@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function FormUser({ setUsers, users, idCounter, setIdCounter }) {
+export default function FormUser({ setUsers, users, idCounter, editingUser, setEditingUser }) {
   const [formData, setFormData] = useState({
     id: idCounter,
     first_name: "",
@@ -8,6 +8,20 @@ export default function FormUser({ setUsers, users, idCounter, setIdCounter }) {
     age: 0,
     gender: "m",
   });
+
+  React.useEffect(() => {
+    if (editingUser) {
+      setFormData(editingUser);
+    } else {
+      setFormData({
+        id: idCounter,
+        first_name: "",
+        last_name: "",
+        age: 0,
+        gender: "m",
+      });
+    }
+  }, [editingUser, idCounter]);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -34,7 +48,13 @@ export default function FormUser({ setUsers, users, idCounter, setIdCounter }) {
     }
 
     // State Updates
-    setUsers([formData, ...users]);
+    if (editingUser) {
+      const updatedList = users.map((u) => (u.id === formData.id ? formData : u));
+      setUsers(updatedList);
+      setEditingUser(null); 
+    } else {
+      setUsers([formData, ...users]);
+    }
 
     setFormData({
       id: idCounter,

@@ -31,6 +31,18 @@ export default function App() {
   ]);
 
   const [idCounter, setIdCounter] = useState(users.length + 1);
+  const [editingUser, setEditingUser] = useState(null);
+
+  function deleteUser(id) {
+  setUsers(users.filter((user) => user.id !== id));
+  if (editingUser && editingUser.id === id) {
+    setEditingUser(null);
+  }
+}
+
+  function selectUserForEdit(user) {
+  setEditingUser(user);
+}
 
   useEffect(() => {
     setIdCounter(idCounter + 1);
@@ -44,14 +56,20 @@ export default function App() {
 
       {/* Form Section */}
       <FormUser
-        setUsers={setUsers}
-        users={users}
-        idCounter={idCounter}
-        setIdCounter={setIdCounter}
-      />
+      setUsers={setUsers}
+      users={users}
+      idCounter={idCounter}
+      setIdCounter={setIdCounter}
+      editingUser={editingUser}
+      setEditingUser={setEditingUser}
+    />
 
       {/* User Gallery Section */}
-      <ContainerUsers users={users} />
+      <ContainerUsers 
+        users={users} 
+        onDelete={deleteUser} 
+        onEdit={selectUserForEdit} 
+      />
     </main>
   );
 }
