@@ -13,12 +13,24 @@ const users = [
     fullname: "Chounce De Guzman",
     age: 10,
     description: "Makulit....",
-  },
+  },  
 ];
 
 export default function Profile() {
   const userParams = useParams();
+  const foundUser = users.find((u) => String(u.id) == userParams.id);
+   
 
+  if (!foundUser) {
+    return (
+      <div className="p-6">
+        <p>No user with ID: {userParams.id} is existing. </p>
+      </div>
+      
+    );
+
+  }
+  
   /*
     useParams return an object
 
@@ -28,18 +40,14 @@ export default function Profile() {
   */
 
   return (
-    <div>
+    <div className="">
       <p>{userParams.id}</p>
-
-      {users.map((u) =>
-        userParams.id == u.id ? (
-          <div>
-            <p>{u.fullname}</p>
-            <p>{u.age}</p>
-            <p>{u.description}</p>
-          </div>
-        ) : null,
-      )}
+      
+      <div>
+        <p>{foundUser.fullname}</p>
+        <p>{foundUser.age}</p>
+        <p>{foundUser.description}</p>
+      </div>
     </div>
   );
 }
